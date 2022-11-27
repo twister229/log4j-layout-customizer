@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" packages="com.example.restservice">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %event %c{10} %M %m%n</Property>
+        <Property name="APP_LOG_ROOT">D:/PROJECT/temp</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+        <RollingFile name="appLog"
+                     fileName="${APP_LOG_ROOT}/log/application.log"
+                     filePattern="${APP_LOG_ROOT}/log/application-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy max="1" />
+        </RollingFile>
+        <RollingFile name="debugLog"
+                     fileName="${APP_LOG_ROOT}/log/application-debug.log"
+                     filePattern="${APP_LOG_ROOT}/log/-debug-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy max="1" />
+        </RollingFile>
+        <RollingFile name="errorLog"
+                     fileName="${APP_LOG_ROOT}/log/application-error.log"
+                     filePattern="${APP_LOG_ROOT}/log/application-error-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB" />
+            </Policies>
+            <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            <DefaultRolloverStrategy max="1" />
+        </RollingFile>
+        <Rewrite name="rewrite">
+            <CustomRewritePolicy />
+            <AppenderRef ref="appLog" level="info" />
+            <AppenderRef ref="debugLog" level="debug"/>
+            <AppenderRef ref="errorLog" level="warn"/>
+        </Rewrite>
+    </Appenders>
+
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="rewrite" />
+        </Root>
+    </Loggers>
+</Configuration>
